@@ -20,11 +20,7 @@ jobs:
       
       - run:
           name: Install pnpm
-          command: |
-            # استخدام سكريبت التثبيت الرسمي لـ pnpm لتجنب مشاكل npm
-            powershell -Command "iwr https://get.pnpm.io/install.ps1 -useb | iex"
-            # إضافة مسار pnpm لمتغيرات البيئة لضمان عمله في الخطوات التالية
-            echo 'export PATH="$HOME/AppData/Local/pnpm:$PATH"' >> $BASH_ENV
+          command: powershell -Command "iwr https://get.pnpm.io/install.ps1 -useb | iex"
       
       - run:
           name: Install dependencies
