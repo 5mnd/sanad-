@@ -1,0 +1,50 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@5.0
+
+jobs:
+  build-windows:
+    executor:
+      name: win/default
+      size: large
+    
+    steps:
+      - checkout
+      
+      - run:
+          name: Install Node.js
+          command: |
+            choco install nodejs-lts -y
+            refreshenv
+      
+      - run:
+          name: Install pnpm
+          command: npm install -g pnpm
+      
+      - run:
+          name: Install dependencies
+          command: pnpm install
+      
+      - run:
+          name: Build Next.js
+          command: pnpm build
+      
+      - run:
+          name: Build Electron app
+          command: pnpm run electron-build
+      
+      - store_artifacts:
+          path: dist-electron
+          destination: windows-builds
+      
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist-electron
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build-windows
