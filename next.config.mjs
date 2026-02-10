@@ -8,7 +8,6 @@ const nextConfig = {
   },
   // PWA Configuration
   reactStrictMode: true,
-  swcMinify: true,
   experimental: {
     optimizePackageImports: ['lucide-react', 'recharts', 'framer-motion'],
   },
