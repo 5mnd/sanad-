@@ -53,7 +53,7 @@
                                       "output":  "dist-electron"
                                   },
                   "win":  {
-                              "icon":  "public/icon-512.svg"
+                              "target":  "nsis"
                           }
               }
 }
