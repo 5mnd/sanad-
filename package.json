@@ -53,9 +53,6 @@
                                       "output":  "dist-electron"
                                   },
                   "win":  {
-                              "target":  [
-                                             "nsis"
-                                         ],
                               "icon":  "public/icon-512.svg"
                           }
               }
