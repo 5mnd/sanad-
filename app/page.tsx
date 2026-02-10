@@ -323,7 +323,7 @@ export default function Page() {
           stockSyncSuccess = true
         } else {
           console.error('[v0] Stock Entry sync failed:', result.type, result.rawError)
-          if (result.type === 'stock_error') {
+          if ((result.type as any) === 'stock_error') {
             toast({
               title: language === 'ar' ? 'تحذير: مخزون غير كافٍ' : 'Warning: Insufficient Stock',
               description: language === 'ar' ? result.messageAr : result.messageEn,
