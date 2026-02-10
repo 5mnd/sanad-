@@ -79,13 +79,13 @@ importers:
         version: 3.25.76
     devDependencies:
       '@types/node':
-        specifier: ^25.2.2
+        specifier: 25.2.2
         version: 25.2.2
       '@types/react':
-        specifier: ^19.2.13
+        specifier: 19.2.13
         version: 19.2.13
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.13)
       electron:
         specifier: ^40.2.1
