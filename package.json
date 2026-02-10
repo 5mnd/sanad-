@@ -1,16 +1,16 @@
 {
-  "name": "my-project",
+  "name": "sanad-pos",
   "version": "0.1.0",
+  "description": "Sanad POS System - Professional PWA and Desktop Edition",
+  "author": "Mohammad Nasser",
   "private": true,
-  "main": "electron-main.js",
+  "main": "main.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "electron": "cross-env NODE_ENV=development electron .",
-    "electron-build": "next build && electron-builder",
-    "dist": "pnpm build && electron-builder --win --x64"
+    "electron-build": "next build && electron-builder"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -47,12 +47,12 @@
     "cmdk": "1.1.1",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
-    "framer-motion": "^11.18.0",
     "input-otp": "1.4.1",
+    "framer-motion": "^11.18.0",
     "lucide-react": "^0.544.0",
+    "qrcode.react": "^4.2.0",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
-    "qrcode.react": "^4.2.0",
     "react": "^19",
     "react-day-picker": "8.10.1",
     "react-dom": "^19",
@@ -70,9 +70,8 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "cross-env": "^10.1.0",
-    "electron": "^40.2.1",
-    "electron-builder": "^26.7.0",
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "5.7.3"
@@ -83,23 +82,11 @@
     "directories": {
       "output": "dist-electron"
     },
-    "files": [
-      "electron-main.js",
-      ".next/**/*",
-      "public/**/*",
-      "package.json",
-      "node_modules/**/*"
-    ],
     "win": {
-      "target": ["nsis"],
-      "icon": "public/icon-512.svg"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "Sanad POS"
+      "icon": "public/icon.ico",
+      "target": [
+        "nsis"
+      ]
     }
   }
 }
