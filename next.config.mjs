@@ -4,7 +4,7 @@ const nextConfig = {
   output: 'export',
   
   // Use relative paths for assets (critical for file:// protocol in Electron)
-  assetPrefix: './',
+  assetPrefix: '',
   
   // Add trailing slashes to URLs
   trailingSlash: true,
