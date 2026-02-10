@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client'
 
 import React from "react"
@@ -42,8 +41,10 @@ import { EmployeeOnboarding } from '@/components/employee-onboarding'
 import { EmployeePortal } from '@/components/employee-portal'
 import { EmptyState, LoadingSkeleton } from '@/components/empty-state'
 import { hasPermission, fetchRolesFromERPNext, initializeRolesAndPermissions } from '@/lib/dynamic-roles'
+import InternalMessaging from '@/components/internal-messaging'
+import InnovativeCalendar from '@/components/innovative-calendar'
 
-type View = 'dashboard' | 'pos' | 'sales' | 'inventory' | 'hr' | 'portal' | 'security' | 'integrations' | 'erpnext' | 'analytics' | 'users'
+type View = 'dashboard' | 'pos' | 'sales' | 'inventory' | 'hr' | 'portal' | 'security' | 'integrations' | 'erpnext' | 'analytics' | 'users' | 'messaging' | 'calendar'
 
 interface CartItem {
   id: string
@@ -72,7 +73,7 @@ interface Employee {
   password?: string
   branchId?: string
   roles?: string[]  // Support multiple roles from ERPNext
-  permissions: { 
+  permissions: {
     dashboard: boolean
     pos: boolean
     sales: boolean
@@ -324,7 +325,7 @@ export default function Page() {
           stockSyncSuccess = true
         } else {
           console.error('[v0] Stock Entry sync failed:', result.type, result.rawError)
-          if ((result.type as any) === 'stock_error') {
+          if (result.type === 'stock_error') {
             toast({
               title: language === 'ar' ? 'تحذير: مخزون غير كافٍ' : 'Warning: Insufficient Stock',
               description: language === 'ar' ? result.messageAr : result.messageEn,
@@ -544,7 +545,7 @@ export default function Page() {
   const [showEmployeeDialog, setShowEmployeeDialog] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
   const defaultPermissions = { dashboard: true, pos: true, sales: false, inventory: false, hr: false, security: false, erpnext: false, integrations: false, employees: false, promotions: false, manageCategories: false }
-  const [employeeForm, setEmployeeForm] = useState({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: {  ...defaultPermissions } })
+  const [employeeForm, setEmployeeForm] = useState({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: { ...defaultPermissions } })
   
   // Users state for HR dashboard - loads from localStorage
   const [users, setUsers] = useState<any[]>([])
@@ -679,6 +680,8 @@ export default function Page() {
     { id: 'inventory' as View, nameKey: 'nav.inventory', icon: Package, permission: 'inventory' },
     { id: 'hr' as View, nameKey: 'nav.hr', icon: Users, permission: 'hr' },
     { id: 'analytics' as View, nameKey: 'nav.analytics', icon: TrendingUp, permission: 'analytics' },
+    { id: 'messaging' as View, nameKey: 'nav.messaging', icon: MessageCircle, permission: 'pos' },
+    { id: 'calendar' as View, nameKey: 'nav.calendar', icon: Clock, permission: 'pos' },
     { id: 'users' as View, nameKey: 'nav.users', icon: Shield, permission: 'users' },
     { id: 'erpnext' as View, nameKey: 'businessSettings.title', icon: Globe, permission: 'erpnext' },
     { id: 'integrations' as View, nameKey: 'nav.integrations', icon: Zap, permission: 'integrations' },
@@ -762,7 +765,7 @@ export default function Page() {
             updated = true
             return {
               ...user,
-              permissions: { 
+              permissions: {
                 dashboard: true,
                 pos: true,
                 sales: user.role === 'admin',
@@ -780,7 +783,7 @@ export default function Page() {
           if (user.permissions.hr !== true) {
             console.log('[v0] 🔧 Adding HR permission to user:', user.username)
             updated = true
-            return { ...user, permissions: {  ...user.permissions, hr: true } }
+            return { ...user, permissions: { ...user.permissions, hr: true } }
           }
           
           return user
@@ -829,7 +832,7 @@ export default function Page() {
           passwordSalt: salt,
           status: 'active',
           createdAt: new Date().toISOString(),
-          permissions: { 
+          permissions: {
             dashboard: true,
             pos: true,
             sales: true,
@@ -843,7 +846,7 @@ export default function Page() {
             permissions: true,
             analytics: true,
             manageCategories: true,
-            
+            users: true,
           },
         }
         
@@ -950,7 +953,7 @@ export default function Page() {
             role: emp.designation || 'Employee',
             position: emp.designation || 'Employee',
             password: '', // Password not fetched for security
-            permissions: { 
+            permissions: {
               dashboard: true,
               pos: emp.designation?.includes('Cashier') || emp.designation?.includes('كاشير'),
               sales: true,
@@ -1431,7 +1434,7 @@ export default function Page() {
       email: registrationForm.email,
       role: language === 'ar' ? 'مدير عام' : 'General Manager',
       position: language === 'ar' ? 'مدير عام' : 'General Manager',
-      permissions: { 
+      permissions: {
         dashboard: true,
         pos: true,
         sales: true,
@@ -5218,7 +5221,7 @@ ${t('export.timestamp')}: ${new Date().toLocaleString()}
               </div>
                   <Button onClick={() => {
                     setSelectedEmployee(null)
-                    setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: {  ...defaultPermissions } })
+                    setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: { ...defaultPermissions } })
                     setShowEmployeeDialog(true)
                   }} className="gap-2">
                     <Plus className="h-4 w-4" />
@@ -5317,7 +5320,7 @@ ${t('export.timestamp')}: ${new Date().toLocaleString()}
               setShowEmployeeDialog(open)
               if (!open) {
                 setSelectedEmployee(null)
-                setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: {  ...defaultPermissions } })
+                setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: { ...defaultPermissions } })
               }
             }}>
               <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -5434,7 +5437,7 @@ ${t('export.timestamp')}: ${new Date().toLocaleString()}
                             </div>
                             <Switch
                               checked={employeeForm.permissions[permKey]}
-                              onCheckedChange={(checked) => setEmployeeForm({ ...employeeForm, permissions: {  ...employeeForm.permissions, [perm.key]: checked } })}
+                              onCheckedChange={(checked) => setEmployeeForm({ ...employeeForm, permissions: { ...employeeForm.permissions, [perm.key]: checked } })}
                             />
                           </div>
                         )
@@ -5478,7 +5481,7 @@ ${t('export.timestamp')}: ${new Date().toLocaleString()}
                     
                     setShowEmployeeDialog(false)
                     setSelectedEmployee(null)
-                    setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: {  ...defaultPermissions } })
+                    setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: { ...defaultPermissions } })
                     }} 
                     className="flex-1"
                   >
@@ -5489,7 +5492,7 @@ ${t('export.timestamp')}: ${new Date().toLocaleString()}
                     onClick={() => {
                       setShowEmployeeDialog(false)
                       setSelectedEmployee(null)
-                      setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: {  ...defaultPermissions } })
+                      setEmployeeForm({ name: '', username: '', email: '', role: '', position: '', password: '', permissions: { ...defaultPermissions } })
                     }}
                     className="bg-transparent"
                   >
@@ -5857,6 +5860,21 @@ ${t('export.timestamp')}: ${new Date().toLocaleString()}
           <UserManagement
             language={language}
             currentUserId={currentUser?.id || 'GUEST'}
+          />
+        )
+      
+      case 'messaging':
+        return (
+          <InternalMessaging
+            currentUserId={currentUser?.id || 'GUEST'}
+            currentUserName={currentUser?.name || 'Guest'}
+          />
+        )
+      
+      case 'calendar':
+        return (
+          <InnovativeCalendar
+            userId={currentUser?.id || 'GUEST'}
           />
         )
       
@@ -6847,4 +6865,3 @@ ${t('export.timestamp')}: ${new Date().toLocaleString()}
     </div>
   )
 }
-

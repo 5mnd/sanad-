@@ -20,19 +20,22 @@ jobs:
       
       - run:
           name: Install pnpm
-          command: powershell -Command "iwr https://get.pnpm.io/install.ps1 -useb | iex"
+          command: npm install -g pnpm
       
       - run:
           name: Install dependencies
-          command: pnpm install
+          command: pnpm install --no-frozen-lockfile
+          no_output_timeout: 15m
       
       - run:
-          name: Build Next.js
+          name: Build Next.js (Static Export)
           command: pnpm build
+          no_output_timeout: 20m
       
       - run:
           name: Build Electron app
-          command: pnpm run electron-build
+          command: pnpm exec electron-builder --win --x64
+          no_output_timeout: 30m
       
       - store_artifacts:
           path: dist-electron
